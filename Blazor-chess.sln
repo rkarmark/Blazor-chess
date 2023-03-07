@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 25.0.1705.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Blazor-chess", "Blazor-chess\Blazor-chess.csproj", "{D038751D-9D66-45AD-8186-FB66F257084C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "blazor-chess", "blazor-chess.csproj", "{C00ED21B-5BA2-472C-92EE-97436ED782BF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -11,15 +11,15 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{D038751D-9D66-45AD-8186-FB66F257084C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{D038751D-9D66-45AD-8186-FB66F257084C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{D038751D-9D66-45AD-8186-FB66F257084C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{D038751D-9D66-45AD-8186-FB66F257084C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C00ED21B-5BA2-472C-92EE-97436ED782BF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C00ED21B-5BA2-472C-92EE-97436ED782BF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C00ED21B-5BA2-472C-92EE-97436ED782BF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C00ED21B-5BA2-472C-92EE-97436ED782BF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {6323DBE1-76DA-4200-919C-41EB4E34298D}
+		SolutionGuid = {76A13218-5A17-4ED0-9FB7-3FBF19170B02}
 	EndGlobalSection
 EndGlobal
