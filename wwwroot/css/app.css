@@ -30,4 +30,7 @@
     .blazor-error-boundary::after {
         content: "An error has occurred."
     }
-
+.box {
+    width: 40px;
+    height: 40px;
+}

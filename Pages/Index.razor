@@ -2,3 +2,21 @@
 
 <h1>Hello, world!</h1>
 
+<table>
+    @for (int i = 0; i < 8; i++)
+        {
+            <tr>
+                @for (int j = 0; j < 8; j++)
+                    {
+                        <td  style="@((i-j)%2==0 ? "background-color: Moccasin" : "background-color: Peru")">
+                            <div >
+                                <img src="./images/bd.svg" />
+                            </div>
+                        </td>
+                    }
+            </tr>
+            
+        }
+</table>
+
+
