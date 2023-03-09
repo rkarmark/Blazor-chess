@@ -1,33 +1,70 @@
 ﻿@page "/"
 
-
-
-<table>
-    @for (int i = 0; i < 8; i++)
+<div class="content">
+    <div class="board">
+        @for (int i = 0; i < 8; i++)
         {
-            <tr>
+            <div>
                 @for (int j = 0; j < 8; j++)
-                    {
-                        <td  style="@((i - j) % 2 == 0 ? "background-color: Moccasin" : "background-color: Peru")">
-                            <div >
-                                <img src="./images/bd.svg" />
-                            </div>
-                        </td>
-                    }
-            </tr>
-
+                {
+                    <div class="box" style="@((i - j) % 2 == 0 ? "background-color: Moccasin" : "background-color: Peru")">
+                        <img class="image" src="./images/bd.svg" />
+                    </div>
+                }
+            </div>
         }
-</table>
-
-
+    </div>
+</div>
 @code {
-        protected override async Task OnInitializedAsync()
+    protected override async Task OnInitializedAsync()
+    {
+        Feild[,] feilds = new Feild[8, 8];
+        
+        await Task.Run(() =>
         {
-            await Task.Run(() =>
-            {
-                Console.WriteLine("hi mom");
-            });
+
+            Console.WriteLine("hi mom");
+
+        });
+    }
+
+    class Feild {
+        public Feild()
+        {
+
+        }
+    }
+
+    class Brick {
+        int x;
+        int y;
+        string type;
+        string color;
+
+        public Brick(int x, int y, string type, string color)
+        {
+            x = this.x;
+            y = this.y;
+            type = this.type;
+            color = this.color;
         }
 
-        
+        string getImage()
+        {
+            string colorchar;
+            string type;
+
+            if (color == "white") {
+                colorchar = "l";
+            } else {
+                colorchar = "d";
+            }
+
+            
+                
+
+            return ("./images/" + "");
+        }
     }
+}
+

@@ -31,6 +31,32 @@
         content: "An error has occurred."
     }
 .box {
-    width: 40px;
-    height: 40px;
+    float: left;
+    max-width:12.5%;
+    max-height:12.5%;
+    width: 80px;
+    height: 80px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.board {
+    display:block;
+    max-width:100%;
+    max-height:100%;
+    width:auto;
+    height:auto;
+    margin: 20px;
+    border: 14px solid #333;
+}
+.image {
+    max-width:75%;
+    width:60px;
+    height:60px;
+}
+.content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    max-width: 100%;
 }
