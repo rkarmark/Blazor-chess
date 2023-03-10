@@ -6,30 +6,33 @@
         {
             <div>
                 @for (int j = 0; j < 8; j++)
-                {
-                    <div class="box" style="@((i - j) % 2 == 0 ? "background-color: Moccasin" : "background-color: Peru")">
-                        <img class="image" src="./images/bd.svg" />
-                    </div>
-                }
+                    {
+                        int k = j;
+                        int h = i;
+                        <div class="box"
+                             style="@((i - j) % 2 == 0 ? "background-color: Moccasin;" : "background-color: Peru;")
+                                    @(board[k,h] ? "border:2px" : "")"
+                             @onclick="() => clicked(h, k)"
+                             >
+                            <img class="image" src="./images/bd.svg" />
+                        </div>
+                    }
             </div>
         }
     </div>
 </div>
 @code {
+    Boolean[,] board = new Boolean[8, 8];
     protected override async Task OnInitializedAsync()
     {
-        Feild[,] feilds = new Feild[8, 8];
-        
         await Task.Run(() =>
         {
-
-            Console.WriteLine("hi mom");
-
+            
         });
     }
 
     class Feild {
-        public Feild()
+        Feild(int x, int y)
         {
 
         }
@@ -38,10 +41,10 @@
     class Brick {
         int x;
         int y;
-        string type;
-        string color;
+        string? type;
+        string? color;
 
-        public Brick(int x, int y, string type, string color)
+        public Brick(int x, int y, string? type, string? color)
         {
             x = this.x;
             y = this.y;
@@ -52,19 +55,37 @@
         string getImage()
         {
             string colorchar;
-            string type;
+            string typechar = "";
 
-            if (color == "white") {
+            if (color == "white")
+            {
                 colorchar = "l";
-            } else {
+            }
+            else
+            {
                 colorchar = "d";
             }
 
-            
-                
-
-            return ("./images/" + "");
+            switch (type)
+            {
+                case "Queen":
+                    typechar = "q";
+                    break;
+                case "King":
+                    typechar = "k";
+                    break;
+                case "Pawn":
+                    typechar = "p";
+                    break;
+                case "Knight":
+                    typechar = "n";
+                    break;
+            }
+            return ("./images/" + typechar + colorchar + ".svg");
         }
     }
-}
+    void clicked(int x, int y) {
+        Console.WriteLine(x + "," + y);
+    }
+    }
 
