@@ -1,42 +1,56 @@
 ﻿@page "/"
 
+
+
 <div class="content">
     <div class="board">
-        @for (int i = 0; i < 8; i++)
-        {
-            <div>
-                @for (int j = 0; j < 8; j++)
+        @for (int i = 0; i < board.Length; i++)
+            {
+                @for (int j = 0; j < board[i].rowFields.Length; j++)
                     {
-                        int k = j;
-                        int h = i;
-                        <div class="box"
-                             style="@((i - j) % 2 == 0 ? "background-color: Moccasin;" : "background-color: Peru;")
-                                    @(board[k,h] ? "border:2px" : "")"
-                             @onclick="() => clicked(h, k)"
+                        int x = j;
+                        int y = i;
+
+                        <div class="box" style="@((i - j) % 2 == 0 ? "background-color: Moccasin;" : "background-color: Peru;")
+                             @(board[i].rowFields[j].isSelected ? "background-color: White" : "")"
+                             @onclick="() => clicked(x, y)"
                              >
                             <img class="image" src="./images/bd.svg" />
                         </div>
                     }
-            </div>
-        }
+            }
     </div>
 </div>
+
+
+    
 @code {
-    Boolean[,] board = new Boolean[8, 8];
-    protected override async Task OnInitializedAsync()
-    {
-        await Task.Run(() =>
+    Row[] board = new Row[8];
+    protected override void OnInitialized() {
+        for (int i = 0; i < board.Length; i++)
         {
-            
-        });
-    }
-
-    class Feild {
-        Feild(int x, int y)
+            board[i] = new Row();
+        }
+        for (int i = 0; i < board.Length; i++)
         {
-
+            for (int j = 0; j < board[i].rowFields.Length; j++)
+            {
+                board[i].rowFields[j] = new Field();
+            }
         }
     }
+
+
+    class Field
+    {
+        public Boolean isSelected = false;
+    }
+
+    class Row {
+        public Field[] rowFields = new Field[8];
+    }
+
+
 
     class Brick {
         int x;
@@ -84,8 +98,17 @@
             return ("./images/" + typechar + colorchar + ".svg");
         }
     }
+
+
+
+
+
     void clicked(int x, int y) {
         Console.WriteLine(x + "," + y);
+
+
+
+
     }
     }
 
