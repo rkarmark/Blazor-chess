@@ -1,158 +1,158 @@
 ﻿@page "/"
+@using blazorchess.Shared
 
-<div class="chess">
-    @for (int i = 0; i < board.Length; i++)
-    {
-        <div>
-            @for (int j = 0; j < board[i].rowFields.Length; j++)
-            {
-                int x = i;
-                int y = j;
-                <div class="box" style="@(board[i].rowFields[j].isSelected ? "background-color: Lime" : ((i - j) % 2 == 0 ? "background-color: Moccasin;" : "background-color: Peru;"))"
-                     @onclick="() => clicked(x, y)">
-                    @if (board[i].rowFields[j].bricks[0] != null)
-                        {
-                            <img class="image" src="@board[i].rowFields[j].bricks[0].getImage()" />
-                        }
-                </div>
-            }
-        </div>
+<style>
+    .box {
+        float: left;
+        max-width: 12.5%;
+        max-height: 12.5%;
+        width: 80px;
+        height: 80px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
     }
+
+    .board {
+        display: block;
+        max-width: 100%;
+        max-height: 100%;
+        width: auto;
+        height: auto;
+        margin: 20px;
+        border: 14px solid #333;
+    }
+
+    .image {
+        max-width: 75%;
+        width: 60px;
+        height: 60px;
+    }
+
+    .content {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        max-width: 100%;
+    }
+
+</style>
+
+<div class="content">
+    <div class="board">
+        @for (int i = 0; i < row.Length; i++)
+        {
+            <div>
+                @for (int j = 0; j < row[i].column.Length; j++)
+                {
+                    int x = i;
+                    int y = j;
+                    <div class="box" style="@(row[i].column[j].isSelected ? "background-color: Lime" : ((i - j) % 2 == 0 ? "background-color: Moccasin;" : "background-color: Peru;"))"
+                         @onclick="() => clicked(x, y)">
+                        @if (row[i].column[j].piece != null)
+                        {
+                            <img class="image" src="@row[i].column[j].piece?.getImage()" />
+                        }
+
+                    </div>
+                }
+            </div>
+        }
+    </div>
 </div>
     
 
 
 @code {
-    Row[] board = new Row[8];
+    //Starts by creating rows for the chessboard
+    Column[] row = new Column[8];
+    public int? x0;
+    public int? y0;
 
     protected override void OnInitialized()
     {
-        for (int i = 0; i < board.Length; i++)
+        //Creates colums and Fields
+        for (int i = 0; i < row.Length; i++)
         {
-            board[i] = new Row();
+            row[i] = new Column();
         }
-        for (int i = 0; i < board.Length; i++)
+        for (int i = 0; i < row.Length; i++)
         {
-            for (int j = 0; j < board[i].rowFields.Length; j++)
+            for (int j = 0; j < row[i].column.Length; j++)
             {
-                board[i].rowFields[j] = new Field();
+
+                row[i].column[j] = new Field();
             }
         }
-        createBoard();
+
+        //Places pieces in starting positions
+        createPiecesObjects();
     }
 
     class Field
     {
         public Boolean isSelected = false;
-        public Brick[] bricks = new Brick[1];
+        public ChessPiece? piece;
     }
 
-    class Row
+    class Column
     {
-        public Field[] rowFields = new Field[8];
-    }
-
-
-    class Brick
-    {
-        int x;
-        int y;
-        string? type;
-        string? color;
-
-        public Brick(int thisx, int thisy, string? thistype, string? thiscolor)
-        {
-            x = thisx;
-            y = thisy;
-            type = thistype;
-            color = thiscolor;
-        }
-
-        public string getImage()
-        {
-            Console.WriteLine(type + "," + color);
-            string colorchar;
-            string typechar;
-
-            if (color == "white")
-            {
-                colorchar = "l";
-            }
-            else
-            {
-                colorchar = "d";
-            }
-
-
-            if (type == "Queen")
-            {
-                typechar = "q";
-            }
-            else if (type == "King")
-            {
-                typechar = "k";
-            }
-            else if (type == "Pawn")
-            {
-                typechar = "p";
-            }
-            else if (type == "Knight")
-            {
-                typechar = "n";
-            }
-            else if (type == "Bishop")
-            {
-                typechar = "b";
-            }
-            else
-            {
-                typechar = "r";
-            }
-
-            Console.WriteLine("./images/" + typechar + colorchar + ".svg");
-            return ("./images/" + typechar + colorchar + ".svg");
-        }
+        public Field[] column = new Field[8];
     }
 
     void clicked(int x, int y)
     {
         Console.WriteLine(x + "," + y);
-        if (board[x].rowFields[y].isSelected)
+        if (row[x].column[y].isSelected)
         {
-            board[x].rowFields[y].isSelected = false;
+            row[x].column[y].isSelected = false;
+            x0 = y0 = null;
         }
         else
         {
-            board[x].rowFields[y].isSelected = true;
+            row[x].column[y].isSelected = true;
+            if (x0 == null || y0 == null)
+            {
+                x0 = x;
+                y0 = y;
+            }
+            else
+            {
+                int x0temp = x0 ?? default(int);
+                int y0temp = y0 ?? default(int);
+                row[x].column[y].piece = row[x0temp].column[y0temp].piece;
+                row[x0temp].column[y0temp].piece = null;
+                row[x].column[y].isSelected = false;
+                row[x0temp].column[y0temp].isSelected = false;
+                x0 = y0 = null;
+            }
         }
     }
 
-    void createBoard() {
-        board[0].rowFields[0].bricks[0] = new Brick(0, 0, "Rook", "black");
-        board[0].rowFields[1].bricks[0] = new Brick(0, 1, "Knight", "black");
-        board[0].rowFields[2].bricks[0] = new Brick(0, 2, "Bishop", "black");
-        board[0].rowFields[3].bricks[0] = new Brick(0, 3, "Queen", "black");
-        board[0].rowFields[4].bricks[0] = new Brick(0, 4, "King", "black");
-        board[0].rowFields[5].bricks[0] = new Brick(0, 5, "Bishop", "black");
-        board[0].rowFields[6].bricks[0] = new Brick(0, 6, "Knight", "black");
-        board[0].rowFields[7].bricks[0] = new Brick(0, 7, "Rook", "black");
-        for (int i = 0; i < board[1].rowFields.Length; i++)
-        {
-            board[1].rowFields[i].bricks[0] = new Brick(1, i, "Pawn", "black");
+    void createPiecesObjects() {
+        createBackRow(0, "Black");
+        createBackRow(7, "White");
+        createPawnRow(1, "Black");
+        createPawnRow(6, "White");
+
+        void createBackRow(int i, string color){
+            row[i].column[0].piece = new Rook(color);
+            row[i].column[1].piece = new Knight(color);
+            row[i].column[2].piece = new Bishop(color);
+            row[i].column[3].piece = new Queen(color);
+            row[i].column[4].piece = new King(color);
+            row[i].column[5].piece = new Bishop(color);
+            row[i].column[6].piece = new Knight(color);
+            row[i].column[7].piece = new Rook(color);
         }
 
-        board[7].rowFields[0].bricks[0] = new Brick(7, 0, "Rook", "white");
-        board[7].rowFields[1].bricks[0] = new Brick(7, 1, "Knight", "white");
-        board[7].rowFields[2].bricks[0] = new Brick(7, 2, "Bishop", "white");
-        board[7].rowFields[3].bricks[0] = new Brick(7, 3, "Queen", "white");
-        board[7].rowFields[4].bricks[0] = new Brick(7, 4, "King", "white");
-        board[7].rowFields[5].bricks[0] = new Brick(7, 5, "Bishop", "white");
-        board[7].rowFields[6].bricks[0] = new Brick(7, 6, "Knight", "white");
-        board[7].rowFields[7].bricks[0] = new Brick(7, 7, "Rook", "white");
-        for (int i = 0; i < board[1].rowFields.Length; i++)
-        {
-            board[6].rowFields[i].bricks[0] = new Brick(6, i, "Pawn", "white");
+        void createPawnRow(int i, string color){
+            for (int j = 0; j < row[i].column.Length; j++)
+            {
+                row[i].column[j].piece = new Pawn(color);
+            }
         }
+
     }
     }
 
