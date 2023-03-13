@@ -3,7 +3,7 @@ namespace blazorchess.Shared
 {
 	public abstract class ChessPiece
 	{
-		string color;
+		public string color;
 		public ChessPiece(string setColor)
 		{
 			color = setColor;
