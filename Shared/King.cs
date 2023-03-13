@@ -3,7 +3,7 @@ namespace blazorchess.Shared
 {
 	public class King : ChessPiece
 	{
-		string color;
+        new string color;
 
 		public King(string setColor):base(setColor)
 		{

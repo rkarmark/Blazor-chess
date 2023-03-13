@@ -5,7 +5,7 @@ namespace blazorchess.Shared
 {
 	public class Rook : ChessPiece
 	{
-        string color;
+        new string color;
 
 		public Rook(string setColor) : base(setColor)
         {

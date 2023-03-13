@@ -3,7 +3,7 @@ namespace blazorchess.Shared
 {
 	public class Pawn : ChessPiece
 	{
-		string color;
+		new string color;
 
 		public Pawn(string setColor):base(setColor)
 		{
