@@ -22,5 +22,11 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Shared\" />
+    <Folder Include="wwwroot\images\Classic\" />
+    <Folder Include="wwwroot\images\Horsey\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Remove="wwwroot\images\Classic\" />
+    <Content Remove="wwwroot\images\Horsey\" />
   </ItemGroup>
 </Project>

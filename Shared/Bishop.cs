@@ -10,19 +10,19 @@ namespace blazorchess.Shared
             color = setColor;
         }
 
-		public override string getImage()
+		public override string getImage(string theme)
 		{
 			string colorchar = "";
 			switch (color)
 			{
 				case "White":
-					colorchar = "l";
+					colorchar = "w";
 					break;
 				case "Black":
-					colorchar = "d";
+					colorchar = "b";
 					break;
 			}
-			return ("./images/b" + colorchar + ".svg");
+			return ("./images/" + theme + "/" + colorchar + "B.svg");
         }
 	}
 }

@@ -9,7 +9,7 @@ namespace blazorchess.Shared
 			color = setColor;
 		}
 
-		public abstract string getImage();
+		public abstract string getImage(string theme);
 		
 		
 	}
