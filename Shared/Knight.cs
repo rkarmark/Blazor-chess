@@ -1,5 +1,5 @@
 ﻿using System;
-namespace blazorchess.Shared
+namespace blazor_chess
 {
 	public class Knight : ChessPiece
 	{
@@ -23,6 +23,14 @@ namespace blazorchess.Shared
                     break;
             }
             return ("./images/" + theme + "/" + colorchar + "N.svg");
+        }
+        public override bool isMoveLegal(int x0, int y0, int x, int y, string?[,] colors)
+        {
+            if (Math.Abs(x - x0) == 2 && Math.Abs(y - y0) == 1 || Math.Abs(x - x0) == 1 && Math.Abs(y - y0) == 2)
+            {
+                return true;
+            }
+            return false;
         }
     }
 }

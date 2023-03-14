@@ -1,5 +1,6 @@
 ﻿@page "/"
-@using blazorchess.Shared
+@namespace blazorchess.Shared
+
 
 <style>
     .box {
@@ -76,117 +77,134 @@
 
 
 @code {
-            //Starts by creating rows for the chessboard
-            Column[] row = new Column[8];
+    //Starts by creating rows for the chessboard
+    public Column[] row = new Column[8];
     public int? x0;
-        public int? y0;
-        string currentTurn = "White";
-        string selectedTheme = "Classic";
+    public int? y0;
+    string currentTurn = "White";
+    string selectedTheme = "Classic";
 
-        protected override void OnInitialized()
+    protected override void OnInitialized()
+    {
+        //Creates colums and Fields
+        for (int i = 0; i < row.Length; i++)
         {
-            //Creates colums and Fields
-            for (int i = 0; i < row.Length; i++)
+            row[i] = new Column();
+        }
+        for (int i = 0; i < row.Length; i++)
+        {
+            for (int j = 0; j < row[i].column.Length; j++)
             {
-                row[i] = new Column();
+
+                row[i].column[j] = new Field();
             }
-            for (int i = 0; i < row.Length; i++)
+        }
+
+        //Places pieces in starting positions
+        createPiecesObjects();
+    }
+
+    public class Field
+    {
+        public Boolean isSelected = false;
+        public ChessPiece? piece;
+    }
+
+    public class Column
+    {
+        public Field[] column = new Field[8];
+    }
+
+    void clicked(int x, int y)
+    {
+        Console.WriteLine(x + "," + y);
+
+        if (row[x].column[y].isSelected)
+        {
+            row[x].column[y].isSelected = false;
+            x0 = y0 = null;
+        }
+        else
+        {
+            if (x0 == null || y0 == null)
             {
-                for (int j = 0; j < row[i].column.Length; j++)
+                if (row[x].column[y].piece != null && row[x].column[y].piece?.color == currentTurn)
                 {
-
-                    row[i].column[j] = new Field();
+                    row[x].column[y].isSelected = true;
+                    x0 = x;
+                    y0 = y;
                 }
-            }
-
-            //Places pieces in starting positions
-            createPiecesObjects();
-        }
-
-        class Field
-        {
-            public Boolean isSelected = false;
-            public ChessPiece? piece;
-        }
-
-        class Column
-        {
-            public Field[] column = new Field[8];
-        }
-
-        void clicked(int x, int y)
-        {
-            Console.WriteLine(x + "," + y);
-
-            if (row[x].column[y].isSelected)
-            {
-                row[x].column[y].isSelected = false;
-                x0 = y0 = null;
             }
             else
             {
-                if (x0 == null || y0 == null)
+                string?[,] colorsOfBrick = new string?[8, 8];
+                for (int i = 0; i < row.Length; i++)
                 {
-                    if (row[x].column[y].piece != null && row[x].column[y].piece?.color == currentTurn)
+                    for (int j = 0; j < row[i].column.Length; j++)
                     {
-                        row[x].column[y].isSelected = true;
-                        x0 = x;
-                        y0 = y;
+                        colorsOfBrick[i, j] = row[i].column[j].piece?.color;
                     }
                 }
-                else
+                int x0temp = x0 ?? default(int);
+                int y0temp = y0 ?? default(int);
+                if (row[x0temp].column[y0temp].piece != null && !checkSameTeam() && row[x0temp].column[y0temp].piece.isMoveLegal(x0temp, y0temp, x, y, colorsOfBrick))
                 {
-                    int x0temp = x0 ?? default(int);
-                    int y0temp = y0 ?? default(int);
-                    if (row[x].column[y].piece?.color != row[x0temp].column[y0temp].piece?.color)
+                    row[x].column[y].piece = row[x0temp].column[y0temp].piece;
+                    row[x0temp].column[y0temp].piece = null;
+                    row[x].column[y].isSelected = false;
+                    row[x0temp].column[y0temp].isSelected = false;
+                    x0 = y0 = null;
+                    switch (currentTurn)
                     {
-                        row[x].column[y].piece = row[x0temp].column[y0temp].piece;
-                        row[x0temp].column[y0temp].piece = null;
-                        row[x].column[y].isSelected = false;
-                        row[x0temp].column[y0temp].isSelected = false;
-                        x0 = y0 = null;
-                        switch (currentTurn)
-                        {
-                            case "White":
-                                currentTurn = "Black";
-                                break;
-                            case "Black":
-                                currentTurn = "White";
-                                break;
-                        }
+                        case "White":
+                            currentTurn = "Black";
+                            break;
+                        case "Black":
+                            currentTurn = "White";
+                            break;
                     }
+                }
+
+
+                Boolean checkSameTeam()
+                {
+                    return row[x].column[y].piece?.color == row[x0temp].column[y0temp].piece?.color;
                 }
             }
-
         }
 
-        void createPiecesObjects()
+    }
+
+    void createPiecesObjects()
+    {
+        createBackRow(0, "Black");
+        createBackRow(7, "White");
+        createPawnRow(1, "Black");
+        createPawnRow(6, "White");
+
+        void createBackRow(int i, string color)
         {
-            createBackRow(0, "Black");
-            createBackRow(7, "White");
-            createPawnRow(1, "Black");
-            createPawnRow(6, "White");
-
-            void createBackRow(int i, string color)
-            {
-                row[i].column[0].piece = new Rook(color);
-                row[i].column[1].piece = new Knight(color);
-                row[i].column[2].piece = new Bishop(color);
-                row[i].column[3].piece = new Queen(color);
-                row[i].column[4].piece = new King(color);
-                row[i].column[5].piece = new Bishop(color);
-                row[i].column[6].piece = new Knight(color);
-                row[i].column[7].piece = new Rook(color);
-            }
-
-            void createPawnRow(int i, string color)
-            {
-                for (int j = 0; j < row[i].column.Length; j++)
-                {
-                    row[i].column[j].piece = new Pawn(color);
-                }
-            }
-
+            row[i].column[0].piece = new Rook(color);
+            row[i].column[1].piece = new Knight(color);
+            row[i].column[2].piece = new Bishop(color);
+            row[i].column[3].piece = new Queen(color);
+            row[i].column[4].piece = new King(color);
+            row[i].column[5].piece = new Bishop(color);
+            row[i].column[6].piece = new Knight(color);
+            row[i].column[7].piece = new Rook(color);
         }
+
+        void createPawnRow(int i, string color)
+        {
+            for (int j = 0; j < row[i].column.Length; j++)
+            {
+                row[i].column[j].piece = new Pawn(color);
+            }
+        }
+
+    }
+
+
+
     }
 
