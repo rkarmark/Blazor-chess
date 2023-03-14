@@ -31,13 +31,29 @@ namespace blazor_chess
 
             for (int i = 1; i < 8; i++)
             {
+                bool hasPassed = false;
                 try
                 {
-                    if (colors[x0 + i, y0] == null)
+                    if (!hasPassed)
                     {
-                        if (x0 + i == x && y0 == y)
+                        if (colors[x0 + i, y0] == null)
                         {
-                            return true;
+                            if (x0 + i == x && y0 == y)
+                            {
+                                return true;
+                            }
+                        }
+                        else
+                        {
+                            if (colors[x0 + i, y0] != color)
+                            {
+                                if (x0 + i == x && y0 == y)
+                                {
+                                    return true;
+                                }
+                                hasPassed = true;
+                            }
+                            break;
                         }
                     }
                     else
@@ -53,13 +69,29 @@ namespace blazor_chess
 
             for (int i = 1; i < 8; i++)
             {
+                bool hasPassed = false;
                 try
                 {
-                    if (colors[x0 - i, y0] == null)
+                    if (!hasPassed)
                     {
-                        if (x0 - i == x && y0 == y)
+                        if (colors[x0 - i, y0] == null)
                         {
-                            return true;
+                            if (x0 - i == x && y0 == y)
+                            {
+                                return true;
+                            }
+                        }
+                        else
+                        {
+                            if (colors[x0 - i, y0] != color)
+                            {
+                                if (x0 - i == x && y0 == y)
+                                {
+                                    return true;
+                                }
+                                hasPassed = true;
+                            }
+                            break;
                         }
                     }
                     else
@@ -75,13 +107,29 @@ namespace blazor_chess
 
             for (int i = 1; i < 8; i++)
             {
+                bool hasPassed = false;
                 try
                 {
-                    if (colors[x0, y0 - i] == null)
+                    if (!hasPassed)
                     {
-                        if (x0 == x && y0 - i == y)
+                        if (colors[x0, y0 + i] == null)
                         {
-                            return true;
+                            if (x0 == x && y0 + i == y)
+                            {
+                                return true;
+                            }
+                        }
+                        else
+                        {
+                            if (colors[x0, y0 + i] != color)
+                            {
+                                if (x0 == x && y0 + i == y)
+                                {
+                                    return true;
+                                }
+                                hasPassed = true;
+                            }
+                            break;
                         }
                     }
                     else
@@ -97,13 +145,29 @@ namespace blazor_chess
 
             for (int i = 1; i < 8; i++)
             {
+                bool hasPassed = false;
                 try
                 {
-                    if (colors[x0, y0 + i] == null)
+                    if (!hasPassed)
                     {
-                        if (x0 == x && y0 + i == y)
+                        if (colors[x0, y0 - i] == null)
                         {
-                            return true;
+                            if (x0 == x && y0 - i == y)
+                            {
+                                return true;
+                            }
+                        }
+                        else
+                        {
+                            if (colors[x0, y0 - i] != color)
+                            {
+                                if (x0 == x && y0 - i == y)
+                                {
+                                    return true;
+                                }
+                                hasPassed = true;
+                            }
+                            break;
                         }
                     }
                     else

@@ -26,7 +26,7 @@ namespace blazor_chess
         }
         public override bool isMoveLegal(int x0, int y0, int x, int y, string?[,] colors)
         {
-            if (Math.Abs(x-x0) <= 1 && Math.Abs(y-y0)<=1 && colors[x,y] == null) {
+            if (Math.Abs(x-x0) <= 1 && Math.Abs(y-y0)<=1 && colors[x,y] != color) {
                 return true;
             }
             return false;
