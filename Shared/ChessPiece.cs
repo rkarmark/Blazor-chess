@@ -4,6 +4,7 @@ namespace blazor_chess
 	public abstract class ChessPiece
 	{
 		public string color;
+		public bool firstMove = true;
 		public ChessPiece(string setColor)
 		{
 			color = setColor;

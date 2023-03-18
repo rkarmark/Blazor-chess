@@ -42,6 +42,14 @@
         align-items: center;
         max-width: 100%;
     }
+
+    .dot {
+        height: 25px;
+        width: 25px;
+        background-color: Lime;
+        border-radius: 50%;
+        display: inline-block;
+    }
 </style>
 
 <div class="content">
@@ -53,13 +61,24 @@
                 {
                     int x = i;
                     int y = j;
-                    <div class="box" style="@(row[i].column[j].isSelected ? "background-color: Lime" : ((i - j) % 2 == 0 ? "background-color: Moccasin;" : "background-color: Peru;"))"
-                         @onclick="() => clicked(x, y)">
+                    bool targetfield = false;
+                    @if (colorLegalFields(x, y))
+                    {
+                        targetfield = true;  
+                    }
+
+                     <div class="box"
+                          style="@(row[i].column[j].isSelected ? "background-color: Lime" : ((i - j) % 2 == 0 ? "background-color: Moccasin;" : "background-color: Peru;"))
+                                 @(targetfield && row[i].column[j].piece != null ? "box-shadow:0px 0px 0px 10px Lime inset;" : "")"
+                            @onclick="() => clicked(x, y)">
+                        @if (targetfield && row[i].column[j].piece == null)
+                        {
+                            <span class="dot"></span>
+                        }
                         @if (row[i].column[j].piece != null)
                         {
                             <img class="image" src="@row[i].column[j].piece?.getImage(selectedTheme)" />
                         }
-
                     </div>
                 }
             </div>
@@ -83,6 +102,7 @@
     public int? y0;
     string currentTurn = "White";
     string selectedTheme = "Classic";
+    string?[,] colorsOfBrick = new string?[8, 8];
 
     protected override void OnInitialized()
     {
@@ -99,7 +119,6 @@
                 row[i].column[j] = new Field();
             }
         }
-
         //Places pieces in starting positions
         createPiecesObjects();
     }
@@ -137,7 +156,17 @@
             }
             else
             {
-                string?[,] colorsOfBrick = new string?[8, 8];
+                int x0temp = x0 ?? default(int);
+                int y0temp = y0 ?? default(int);
+
+                if (checkSameTeam(x, y, x0temp, y0temp))
+                {
+                    row[x0temp].column[y0temp].isSelected = false;
+                    row[x].column[y].isSelected = true;
+                    x0 = x;
+                    y0 = y;
+                }
+
                 for (int i = 0; i < row.Length; i++)
                 {
                     for (int j = 0; j < row[i].column.Length; j++)
@@ -145,10 +174,10 @@
                         colorsOfBrick[i, j] = row[i].column[j].piece?.color;
                     }
                 }
-                int x0temp = x0 ?? default(int);
-                int y0temp = y0 ?? default(int);
-                if (row[x0temp].column[y0temp].piece != null && !checkSameTeam() && row[x0temp].column[y0temp].piece.isMoveLegal(x0temp, y0temp, x, y, colorsOfBrick))
+
+                if (row[x0temp].column[y0temp].piece != null && !checkSameTeam(x,y,x0temp,y0temp) && row[x0temp].column[y0temp].piece!.isMoveLegal(x0temp, y0temp, x, y, colorsOfBrick))
                 {
+                    row[x0temp].column[y0temp].piece!.firstMove = false;
                     row[x].column[y].piece = row[x0temp].column[y0temp].piece;
                     row[x0temp].column[y0temp].piece = null;
                     row[x].column[y].isSelected = false;
@@ -164,15 +193,27 @@
                             break;
                     }
                 }
-
-
-                Boolean checkSameTeam()
-                {
-                    return row[x].column[y].piece?.color == row[x0temp].column[y0temp].piece?.color;
-                }
             }
         }
+    }
 
+    bool colorLegalFields(int x, int y)
+    {
+        for (int i = 0; i < row.Length; i++)
+        {
+            for (int j = 0; j < row[i].column.Length; j++)
+            {
+                colorsOfBrick[i, j] = row[i].column[j].piece?.color;
+            }
+        }
+        int x0temp = x0 ?? default(int);
+        int y0temp = y0 ?? default(int);
+        return (row[x0temp].column[y0temp].piece != null && !checkSameTeam(x,y,x0temp,y0temp) && row[x0temp].column[y0temp].piece!.isMoveLegal(x0temp, y0temp, x, y, colorsOfBrick));
+    }
+
+    bool checkSameTeam(int x, int y, int x0, int y0)
+    {
+        return row[x].column[y].piece?.color == row[x0].column[y0].piece?.color;
     }
 
     void createPiecesObjects()
@@ -203,8 +244,5 @@
         }
 
     }
-
-
-
     }
 

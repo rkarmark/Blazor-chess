@@ -4,12 +4,10 @@ namespace blazor_chess
     public class Pawn : ChessPiece
     {
         new string color;
-        public bool firstMove;
 
         public Pawn(string setColor) : base(setColor)
         {
             color = setColor;
-            firstMove = true;
         }
 
         public override string getImage(string theme)
@@ -40,7 +38,7 @@ namespace blazor_chess
                             {
                                 if (x0 - i == x && y0 == y)
                                 {
-                                    firstMove = false;
+                                    
                                     return true;
                                 }
                             }
@@ -62,7 +60,7 @@ namespace blazor_chess
                             {
                                 if (x0 - i == x && y0 + 1 == y)
                                 {
-                                    firstMove = false;
+                                    
                                     return true;
                                 }
                             }
@@ -70,7 +68,7 @@ namespace blazor_chess
                             {
                                 if (x0 - i == x && y0 - 1 == y)
                                 {
-                                    firstMove = false;
+                                    
                                     return true;
                                 }
                             }
@@ -96,7 +94,7 @@ namespace blazor_chess
                             {
                                 if (x0 + i == x && y0 == y)
                                 {
-                                    firstMove = false;
+                                    
                                     return true;
                                 }
                             }
@@ -118,7 +116,7 @@ namespace blazor_chess
                             {
                                 if (x0 + i == x && y0 + 1 == y)
                                 {
-                                    firstMove = false;
+                                    
                                     return true;
                                 }
                             }
@@ -126,7 +124,7 @@ namespace blazor_chess
                             {
                                 if (x0 + i == x && y0 - 1 == y)
                                 {
-                                    firstMove = false;
+                                    
                                     return true;
                                 }
                             }
@@ -159,7 +157,7 @@ namespace blazor_chess
                             {
                                 if (x0 - i == x && y0 == y)
                                 {
-                                    firstMove = false;
+                                    
                                     return true;
                                 }
                             }
@@ -181,7 +179,7 @@ namespace blazor_chess
                             {
                                 if (x0 - i == x && y0 + 1 == y)
                                 {
-                                    firstMove = false;
+                                    
                                     return true;
                                 }
                             }
@@ -189,7 +187,7 @@ namespace blazor_chess
                             {
                                 if (x0 - i == x && y0 - 1 == y)
                                 {
-                                    firstMove = false;
+                                    
                                     return true;
                                 }
                             }
@@ -215,7 +213,7 @@ namespace blazor_chess
                             {
                                 if (x0 + i == x && y0 == y)
                                 {
-                                    firstMove = false;
+                                    
                                     return true;
                                 }
                             }
@@ -237,7 +235,7 @@ namespace blazor_chess
                             {
                                 if (x0 + i == x && y0 + 1 == y)
                                 {
-                                    firstMove = false;
+                                    
                                     return true;
                                 }
                             }
@@ -245,7 +243,7 @@ namespace blazor_chess
                             {
                                 if (x0 + i == x && y0 - 1 == y)
                                 {
-                                    firstMove = false;
+                                    
                                     return true;
                                 }
                             }
