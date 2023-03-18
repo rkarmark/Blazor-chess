@@ -10,6 +10,11 @@ namespace blazor_chess
 			color = setColor;
 		}
 
+        public override string getType()
+        {
+            return "King";
+        }
+
         public override string getImage(string theme)
         {
             string colorchar = "";

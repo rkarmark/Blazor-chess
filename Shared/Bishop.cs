@@ -25,6 +25,11 @@ namespace blazor_chess
 			return ("./images/" + theme + "/" + colorchar + "B.svg");
         }
 
+        public override string getType()
+        {
+            return "Bishop";
+        }
+
         public override bool isMoveLegal(int x0, int y0, int x, int y, string?[,] colors)
         {
 
