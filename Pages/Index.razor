@@ -32,7 +32,7 @@
     }
 
         .image:hover {
-            transform: scale(1.2);
+            transform: scale(1.1);
         }
 
     .content {
@@ -48,8 +48,27 @@
         background-color: Lime;
         border-radius: 50%;
         display: inline-block;
-        opacity:70%;
+        opacity: 0%;
+        transition:ease opacity 0.25s;
     }
+
+    .greenBorder {
+        box-shadow: 0px 0px 0px 7px Lime inset;
+        transition: box-shadow 0.25s ease;
+    }
+
+    .limeSquare {
+        background-color: Lime;
+    }
+
+    .lightSquare {
+        background-color: Moccasin;
+    }
+
+    .darkSquare {
+        background-color: Peru;
+    }
+
 </style>
 
 <div class="content">
@@ -58,30 +77,31 @@
         {
             <div>
                 @for (int j = 0; j < fields.GetLength(1); j++)
-                {
-                    int x = i;
-                    int y = j;
-                    bool targetfield = false;
-                    @if (colorLegalFields(i, j))
                     {
-                        targetfield = true;
+                        Console.WriteLine(i + "," + j);
+                        Console.WriteLine(fields[i, j].isSelected);
+                        int x = i;
+                        int y = j;
+                        
+                <div class="box
+                     @((i - j) % 2 == 0 ? "lightSquare" : "darkSquare")
+                     @(colorLegalFields(i,j) && fields[i, j].piece != null ? "greenBorder": "")"
+                     style="@(fields[i,j].isSelected ? "background-color: Lime;" : "")"
+                     @onclick="() => clicked(x, y)"
+                     >
+
+                    @if (fields[i, j].piece != null)
+                    {
+                        <img class="image"
+                             src="@fields[i, j].piece?.getImage(selectedTheme)"
+                             alt="@fields[i, j].piece!.color @fields[i, j].piece!.getType()" />
+                    }
+                    else
+                    {
+                        <span class="dot" style="@(colorLegalFields(i,j) && x0 != null ? "opacity:85%" : "")"></span>
                     }
 
-                    <div class="box"
-                            style="@(fields[i,j].isSelected ? "background-color: Lime" : ((i - j) % 2 == 0 ? "background-color: Moccasin;" : "background-color: Peru;"))
-                                @(targetfield && fields[i, j].piece != null ? "box-shadow:0px 0px 0px 7px Lime inset;" : "")"
-                            @onclick="() => clicked(x, y)">
-                        @if (targetfield && (fields[i, j].piece == null) && x0 != null)
-                        {
-                            <span class="dot"></span>
-                        }
-                        @if (fields[i, j].piece != null)
-                        {
-                            <img class="image"
-                                    src="@fields[i, j].piece?.getImage(selectedTheme)"
-                                    alt="@fields[i, j].piece!.color @fields[i, j].piece!.getType()" />
-                        }
-                    </div>
+                </div>
                 }
             </div>
         }
@@ -99,17 +119,15 @@
 @code {
     //Starts by creating rows for the chessboard
     public Field[,] fields = new Field[8, 8];
+    public bool[,,,] targetField = new bool[8, 8, 8, 8];
     public int? x0;
     public int? y0;
     string currentTurn = "White";
     string selectedTheme = "Classic";
-    string?[,] colorsOfBrick = new string?[8, 8];
+
 
     protected override void OnInitialized()
     {
-        //Creates colums and Fields
-        
-
         for (int i = 0; i < fields.GetLength(0); i++)
         {
             for(int j = 0; j < fields.GetLength(1); j++)
@@ -117,8 +135,71 @@
                 fields[i, j] = new Field();
             }
         }
+
         //Places pieces in starting positions
         createPiecesObjects();
+        newTurn();
+        currentTurn = "White";
+
+        void createPiecesObjects()
+        {
+            createBackRow(0, "Black");
+            createBackRow(7, "White");
+            createPawnRow(1, "Black");
+            createPawnRow(6, "White");
+
+            void createBackRow(int i, string color)
+            {
+                fields[i, 0].piece = new Rook(color);
+                fields[i, 1].piece = new Knight(color);
+                fields[i, 2].piece = new Bishop(color);
+                fields[i, 3].piece = new Queen(color);
+                fields[i, 4].piece = new King(color);
+                fields[i, 5].piece = new Bishop(color);
+                fields[i, 6].piece = new Knight(color);
+                fields[i, 7].piece = new Rook(color);
+            }
+
+            void createPawnRow(int i, string color)
+            {
+                for (int j = 0; j < fields.GetLength(1); j++)
+                {
+                    fields[i, j].piece = new Pawn(color);
+                }
+            }
+        }
+    }
+
+    void newTurn()
+    {
+        for(int i = 0; i < targetField.GetLength(0); i++)
+        {
+            for (int j = 0; j < targetField.GetLength(1); j++)
+            {
+
+                for (int k = 0; k < targetField.GetLength(2); k++)
+                {
+                    for (int l = 0; l < targetField.GetLength(3); l++)
+                    {
+                        if (fields[i, j].piece == null)
+                        {
+                            targetField[i, j, k, l] = false;
+                        } else {
+                            targetField[i, j, k, l] = (fields[i, j].piece!.isMoveLegal(i, j, k, l, fields) && !checkSameTeam(i,j,k,l));
+                        }
+                    }
+                }
+            }
+        }
+        switch (currentTurn)
+        {
+            case "White":
+                currentTurn = "Black";
+                break;
+            case "Black":
+                currentTurn = "White";
+                break;
+        }
     }
 
     void clicked(int x, int y)
@@ -152,15 +233,7 @@
                     y0 = y;
                 }
 
-                for (int i = 0; i < fields.GetLength(0); i++)
-                {
-                    for (int j = 0; j < fields.GetLength(1); j++)
-                    {
-                        colorsOfBrick[i, j] = fields[i, j].piece?.color;
-                    }
-                }
-
-                if (fields[x0temp, y0temp].piece != null && !checkSameTeam(x, y, x0temp, y0temp) && fields[x0temp, y0temp].piece!.isMoveLegal(x0temp, y0temp, x, y, fields))
+                if (fields[x0temp, y0temp].piece != null && colorLegalFields(x, y))
                 {
                     fields[x0temp, y0temp].piece!.firstMove = false;
                     fields[x, y].piece = fields[x0temp, y0temp].piece;
@@ -168,15 +241,7 @@
                     fields[x, y].isSelected = false;
                     fields[x0temp, y0temp].isSelected = false;
                     x0 = y0 = null;
-                    switch (currentTurn)
-                    {
-                        case "White":
-                            currentTurn = "Black";
-                            break;
-                        case "Black":
-                            currentTurn = "White";
-                            break;
-                    }
+                    newTurn();
                 }
             }
         }
@@ -184,48 +249,15 @@
 
     bool colorLegalFields(int x, int y)
     {
-        for (int i = 0; i < fields.GetLength(0); i++)
-        {
-            for (int j = 0; j < fields.GetLength(1); j++)
-            {
-                colorsOfBrick[i, j] = fields[i, j].piece?.color;
-            }
-        }
         int x0temp = x0 ?? default(int);
         int y0temp = y0 ?? default(int);
-        return (fields[x0temp, y0temp].piece != null && !checkSameTeam(x, y, x0temp, y0temp) && fields[x0temp, y0temp].piece!.isMoveLegal(x0temp, y0temp, x, y, fields));
+        return targetField[x0temp, y0temp, x, y];
     }
 
-    bool checkSameTeam(int x, int y, int x0, int y0)
+    bool checkSameTeam(int x0, int y0, int x, int y)
     {
         return fields[x, y].piece?.color == fields[x0,y0].piece?.color;
     }
 
-    void createPiecesObjects()
-    {
-        createBackRow(0, "Black");
-        createBackRow(7, "White");
-        createPawnRow(1, "Black");
-        createPawnRow(6, "White");
 
-        void createBackRow(int i, string color)
-        {
-            fields[i,0].piece = new Rook(color);
-            fields[i, 1].piece = new Knight(color);
-            fields[i, 2].piece = new Bishop(color);
-            fields[i, 3].piece = new Queen(color);
-            fields[i, 4].piece = new King(color);
-            fields[i, 5].piece = new Bishop(color);
-            fields[i, 6].piece = new Knight(color);
-            fields[i, 7].piece = new Rook(color);
-        }
-
-        void createPawnRow(int i, string color)
-        {
-            for (int j = 0; j < fields.GetLength(1); j++)
-            {
-                fields[i, j].piece = new Pawn(color);
-            }
-        }
-    }
     }
