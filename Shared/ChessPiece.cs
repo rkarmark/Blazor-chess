@@ -12,7 +12,9 @@ namespace blazor_chess
 
 		public abstract string getImage(string theme);
 		public abstract string getType();
-		public abstract Boolean isMoveLegal(int x0, int y0, int x, int y,string?[,] colors);
-	}
+		public abstract Boolean isMoveLegal(int x0, int y0, int x, int y, Field[,] fields);
+
+        
+    }
 }
 

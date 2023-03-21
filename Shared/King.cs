@@ -29,9 +29,9 @@ namespace blazor_chess
             }
             return ("./images/" + theme + "/" + colorchar + "K.svg");
         }
-        public override bool isMoveLegal(int x0, int y0, int x, int y, string?[,] colors)
+        public override bool isMoveLegal(int x0, int y0, int x, int y, Field[,] fields)
         {
-            if (Math.Abs(x-x0) <= 1 && Math.Abs(y-y0)<=1 && colors[x,y] != color) {
+            if (Math.Abs(x-x0) <= 1 && Math.Abs(y-y0)<=1 && fields[x,y].piece?.color != color) {
                 return true;
             }
             return false;

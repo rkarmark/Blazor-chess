@@ -32,7 +32,7 @@ namespace blazor_chess
             return "Rook";
         }
 
-        public override bool isMoveLegal(int x0, int y0, int x, int y, string?[,] colors)
+        public override bool isMoveLegal(int x0, int y0, int x, int y, Field[,] fields)
         {
 
             for (int i = 1; i < 8; i++)
@@ -42,7 +42,7 @@ namespace blazor_chess
                 {
                     if (!hasPassed)
                     {
-                        if (colors[x0 + i, y0] == null)
+                        if (fields[x0 + i, y0].piece?.color == null)
                         {
                             if (x0 + i == x && y0 == y)
                             {
@@ -51,7 +51,7 @@ namespace blazor_chess
                         }
                         else
                         {
-                            if (colors[x0 + i, y0] != color)
+                            if (fields[x0 + i, y0].piece?.color != color)
                             {
                                 if (x0 + i == x && y0 == y)
                                 {
@@ -80,7 +80,7 @@ namespace blazor_chess
                 {
                     if (!hasPassed)
                     {
-                        if (colors[x0 - i, y0] == null)
+                        if (fields[x0 - i, y0].piece?.color == null)
                         {
                             if (x0 - i == x && y0 == y)
                             {
@@ -89,7 +89,7 @@ namespace blazor_chess
                         }
                         else
                         {
-                            if (colors[x0 - i, y0] != color)
+                            if (fields[x0 - i, y0].piece?.color != color)
                             {
                                 if (x0 - i == x && y0 == y)
                                 {
@@ -118,7 +118,7 @@ namespace blazor_chess
                 {
                     if (!hasPassed)
                     {
-                        if (colors[x0, y0 + i] == null)
+                        if (fields[x0, y0 + i].piece?.color == null)
                         {
                             if (x0 == x && y0 + i == y)
                             {
@@ -127,7 +127,7 @@ namespace blazor_chess
                         }
                         else
                         {
-                            if (colors[x0, y0 + i] != color)
+                            if (fields[x0, y0 + i].piece?.color != color)
                             {
                                 if (x0 == x && y0 + i == y)
                                 {
@@ -156,7 +156,7 @@ namespace blazor_chess
                 {
                     if (!hasPassed)
                     {
-                        if (colors[x0, y0 - i] == null)
+                        if (fields[x0, y0 - i].piece?.color == null)
                         {
                             if (x0 == x && y0 - i == y)
                             {
@@ -165,7 +165,7 @@ namespace blazor_chess
                         }
                         else
                         {
-                            if (colors[x0, y0 - i] != color)
+                            if (fields[x0, y0 - i].piece?.color != color)
                             {
                                 if (x0 == x && y0 - i == y)
                                 {
