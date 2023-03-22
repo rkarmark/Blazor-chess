@@ -267,7 +267,7 @@ namespace blazor_chess
                 {
                     if (!hasPassed)
                     {
-                        if (fields[x0 - i, y0 + i] == null)
+                        if (fields[x0 - i, y0 + i].piece?.color == null)
                         {
                             if (x0 - i == x && y0 + i == y)
                             {
