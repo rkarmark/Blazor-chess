@@ -32,7 +32,7 @@ namespace blazor_chess
 
         public override bool isMoveLegal(int x0, int y0, int x, int y, Field[,] fields)
         {
-            if (firstMove)
+            if (moveCount == 0)
             {
                 if (color == "White")
                 {
@@ -44,7 +44,7 @@ namespace blazor_chess
                             {
                                 if (x0 - i == x && y0 == y)
                                 {
-                                    
+
                                     return true;
                                 }
                             }
@@ -66,7 +66,7 @@ namespace blazor_chess
                             {
                                 if (x0 - i == x && y0 + 1 == y)
                                 {
-                                    
+
                                     return true;
                                 }
                             }
@@ -74,7 +74,7 @@ namespace blazor_chess
                             {
                                 if (x0 - i == x && y0 - 1 == y)
                                 {
-                                    
+
                                     return true;
                                 }
                             }
@@ -100,7 +100,7 @@ namespace blazor_chess
                             {
                                 if (x0 + i == x && y0 == y)
                                 {
-                                    
+
                                     return true;
                                 }
                             }
@@ -122,7 +122,7 @@ namespace blazor_chess
                             {
                                 if (x0 + i == x && y0 + 1 == y)
                                 {
-                                    
+
                                     return true;
                                 }
                             }
@@ -130,7 +130,7 @@ namespace blazor_chess
                             {
                                 if (x0 + i == x && y0 - 1 == y)
                                 {
-                                    
+
                                     return true;
                                 }
                             }
@@ -151,7 +151,7 @@ namespace blazor_chess
                     return false;
                 }
             }
-            else if (!firstMove)
+            else if (moveCount > 0)
             {
                 if (color == "White")
                 {
@@ -163,7 +163,7 @@ namespace blazor_chess
                             {
                                 if (x0 - i == x && y0 == y)
                                 {
-                                    
+
                                     return true;
                                 }
                             }
@@ -185,7 +185,7 @@ namespace blazor_chess
                             {
                                 if (x0 - i == x && y0 + 1 == y)
                                 {
-                                    
+
                                     return true;
                                 }
                             }
@@ -193,7 +193,7 @@ namespace blazor_chess
                             {
                                 if (x0 - i == x && y0 - 1 == y)
                                 {
-                                    
+
                                     return true;
                                 }
                             }
@@ -219,7 +219,7 @@ namespace blazor_chess
                             {
                                 if (x0 + i == x && y0 == y)
                                 {
-                                    
+
                                     return true;
                                 }
                             }
@@ -241,7 +241,7 @@ namespace blazor_chess
                             {
                                 if (x0 + i == x && y0 + 1 == y)
                                 {
-                                    
+
                                     return true;
                                 }
                             }
@@ -249,7 +249,7 @@ namespace blazor_chess
                             {
                                 if (x0 + i == x && y0 - 1 == y)
                                 {
-                                    
+
                                     return true;
                                 }
                             }
