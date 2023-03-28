@@ -1,118 +1,30 @@
 ﻿@page "/"
 @namespace blazorchess.Shared
 
-<style>
-    .box {
-        float: left;
-        max-width: 12.5%;
-        max-height: 12.5%;
-        width: 80px;
-        height: 80px;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        transition: background-color 0.3s ease;
-    }
-
-    .board {
-        display: block;
-        max-width: 100%;
-        max-height: 100%;
-        width: auto;
-        height: auto;
-        margin: 20px;
-        border: 14px solid #333;
-    }
-
-    .image {
-        max-width: 75%;
-        width: 60px;
-        height: 60px;
-        transition-duration: 0.14s;
-    }
-
-        .image:hover {
-            transform: scale(1.1);
-        }
-
-    .content {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        max-width: 100%;
-        padding-bottom: 100%;
-    }
-
-    .dot {
-        height: 25px;
-        width: 25px;
-        background-color: Lime;
-        border-radius: 50%;
-        display: inline-block;
-        opacity: 0%;
-        transition: ease opacity 0.25s;
-    }
-
-    .greenBorder {
-        box-shadow: 0px 0px 0px 7px Lime inset;
-        transition: box-shadow 0.25s ease;
-    }
-
-    .limeSquare {
-        background-color: Lime;
-    }
-
-    .lightSquare {
-        background-color: Moccasin;
-    }
-
-    .darkSquare {
-        background-color: Peru;
-    }
-</style>
-
-
-
-        
-            
-        
-    
-<div>
-
+<div class="fixed w-screen h-screen bg-cover" style="background-image:url('./images/background.jpg">
 <div class="flex">
-    <div class="border-8 border-neutral-700 rounded-2xl overflow-hidden mx-auto mt-8 aspect-square drop-shadow-2xl @(whiteTurn() ? "border-b-green-400" : "border-t-green-400")">
-        @for (int i = 0; i < fields.GetLength(0); i++)
-        {
-            <div>
-                @for (int j = 0; j < fields.GetLength(1); j++)
+    <div class="border-8 border-neutral-700 rounded-2xl overflow-hidden mx-auto mt-8  drop-shadow-2xl @(whiteTurn() ? "border-b-lime-500" : "border-t-lime-500")">
+            @for (int i = 0; i < fields.GetLength(0); i++)
+            {
+                <div class="flex w-64 h-8 sm:w-96 sm:h-12">
+                    @for (int j = 0; j < fields.GetLength(1); j++)
                     {
-                        Console.WriteLine(i + "," + j);
-                        Console.WriteLine(fields[i, j].isSelected);
                         int x = i;
                         int y = j;
-                        
-                <div class="box
-                     @((i - j) % 2 == 0 ? "bg-orange-200" : "bg-amber-600")
-                     @(colorLegalFields(i,j) && fields[i, j].piece != null ? "greenBorder": "")"
-                     style="@(fields[i,j].isSelected ? "background-color: Lime;" : "")"
-                     @onclick="() => clicked(x, y)"
-                     >
 
-                    @if (fields[i, j].piece != null)
-                    {
-                        <img class="image"
-                             src="@fields[i, j].piece?.getImage(selectedTheme)"
-                             alt="@fields[i, j].piece!.color @fields[i, j].piece!.getType()" />
+                        <div class="w-8 h-8 sm:w-12 sm:h-12 aspect-square grow flex border-box @(colorLegalFields(i,j) && fields[i, j].piece != null ? "border-4 border-lime-500": "") @(fields[i,j].isSelected ? "bg-lime-500" : ((i - j) % 2 == 0 ? "bg-orange-200" : "bg-amber-600"))" @onclick="() => clicked(x, y)" >
+                            @if (fields[i, j].piece != null)
+                            {
+                                    <img class="w-6 h-6 sm:h-10 sm:w-10 translate-x-1 translate-y-1 @(colorLegalFields(i,j) && fields[i, j].piece != null ? "translate-x-0 translate-y-0": "")" src="@fields[i, j].piece?.getImage(selectedTheme)" alt="@fields[i, j].piece!.color @fields[i, j].piece!.getType()" />
+                            }
+                            else
+                            {
+                                    <span class="h-4 w-4 translate-x-2 translate-y-2 sm:translate-x-4 sm:translate-y-4 bg-lime-500 rounded-full @(colorLegalFields(i,j) && x0 != null ? "" : "hidden")" ></span>
+                            }
+                        </div>
                     }
-                    else
-                    {
-                        <span class="dot" style="@(colorLegalFields(i,j) && x0 != null ? "opacity:85%" : "")"></span>
-                    }
-
                 </div>
-                }
-            </div>
-        }
+            }
     </div>
 </div>
 
@@ -123,8 +35,10 @@
         <option value="Horsey">Horsey</option>
     </select>
 </div>
+
 </div>
-    
+
+
 
 
 
@@ -142,7 +56,7 @@
     {
         for (int i = 0; i < fields.GetLength(0); i++)
         {
-            for(int j = 0; j < fields.GetLength(1); j++)
+            for (int j = 0; j < fields.GetLength(1); j++)
             {
                 fields[i, j] = new Field();
             }
@@ -184,7 +98,7 @@
 
     void newTurn()
     {
-        for(int i = 0; i < targetField.GetLength(0); i++)
+        for (int i = 0; i < targetField.GetLength(0); i++)
         {
             for (int j = 0; j < targetField.GetLength(1); j++)
             {
@@ -196,8 +110,10 @@
                         if (fields[i, j].piece == null)
                         {
                             targetField[i, j, k, l] = false;
-                        } else {
-                            targetField[i, j, k, l] = (fields[i, j].piece!.isMoveLegal(i, j, k, l, fields) && !checkSameTeam(i,j,k,l));
+                        }
+                        else
+                        {
+                            targetField[i, j, k, l] = (fields[i, j].piece!.isMoveLegal(i, j, k, l, fields) && !checkSameTeam(i, j, k, l));
                         }
                     }
                 }
@@ -268,7 +184,7 @@
 
     bool checkSameTeam(int x0, int y0, int x, int y)
     {
-        return fields[x, y].piece?.color == fields[x0,y0].piece?.color;
+        return fields[x, y].piece?.color == fields[x0, y0].piece?.color;
     }
 
     bool whiteTurn()
