@@ -3,7 +3,7 @@
 
 <div class="fixed w-screen h-screen overflow-scroll	bg-cover dark:invert" style="background-image:url('./images/background.jpg">
     <div class="flex dark:invert">
-        <div class="w-9/10 sm:w-2/3 ml:w-1/2 lg:w-3/8 xl:w-1/3 border-8 border-neutral-700 rounded-2xl overflow-hidden mx-auto mt-8  drop-shadow-2xl @(whiteTurn() ? "border-b-lime-500" : "border-t-lime-500")">
+        <div class="container border-8 border-neutral-700 rounded-2xl overflow-hidden mx-auto mt-8  drop-shadow-2xl @(whiteTurn() ? "border-b-lime-500" : "border-t-lime-500")">
             <div class="grid grid-cols-8 grid-rows-8">
 
                 @for (int i = 0; i < fields.GetLength(0); i++)
@@ -12,17 +12,25 @@
                     {
                         int x = i;
                         int y = j;
-
-                        <div class="aspect-square grow flex box-border @(colorLegalFields(i,j) && fields[i, j].piece != null ? "border-4 border-lime-500": "") @(fields[i,j].isSelected ? "bg-lime-500" : ((i - j) % 2 == 0 ? "bg-orange-200" : "bg-amber-600"))" @onclick="() => clicked(x, y)" >
-                            @if (fields[i, j].piece != null)
-                            {
-                                    <img class="w-3/4 h-3/4 m-auto" src="@fields[i, j].piece?.getImage(selectedTheme)" alt="@fields[i, j].piece!.color @fields[i, j].piece!.getType()" />
-                            }
-                            else
-                            {
-                                    <span class="w-1/3 h-1/3 m-auto bg-lime-500 rounded-full @(colorLegalFields(i,j) && x0 != null ? "" : "hidden")" ></span>
-                            }
-                        </div>
+                            <div class="aspect-square grow flex box-border duration-300
+                            /*
+                                Der sker en del her i css'en:
+                                    Aspect-square for at være sikker på at feltet er et kvadrat. 
+                            */ 
+                            @(colorLegalFields(i,j) && fields[i, j].piece != null ? "border-4 border-lime-500": "") 
+                            @(fields[i,j].isSelected ? "bg-lime-500" : ((i - j) % 2 == 0 ? "bg-orange-200" : "bg-amber-600"))"         
+                            @onclick="() => clicked(x, y)" >
+                                <!-- Her bliver der tjekket om der er en brik på feltet. Hvis der er en brik bliver der kaldt en metode for brikken for at få et billede af den som bliver vist. -->
+                                @if (fields[i, j].piece != null)
+                                {
+                                    <img class="w-3/4 h-3/4 m-auto select-none pointer-events-none" src="@fields[i, j].piece?.getImage(selectedTheme)" alt="@fields[i, j].piece!.color @fields[i, j].piece!.getType()" />
+                                }
+                                else
+                                {
+                                    //Hvis der ikke er en brik på feltet OG feltet er lovligt at flytte til bliver der vist et en grøm cirkel.
+                                    <span class="w-1/3 h-1/3 m-auto bg-lime-500 rounded-full duration-300 @(colorLegalFields(i,j) && x0 != null ? "opacity-100" : "opacity-0")" ></span>
+                                }
+                            </div>
                     }          
                 }
             </div>
@@ -31,7 +39,7 @@
 
     <div class="flex flex-col pb-16">
         <label class="block text-ml font-medium leading-6 text-gray-900 mt-4 mx-auto">Theme:</label>
-        <select @bind="selectedTheme" class="m-auto mt-2 block w-64 rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6">
+        <select @bind="selectedTheme" class="m-auto mt-2 block w-64 rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6 outline-none select-none">
             <option value="Classic">Classic</option>
             <option value="Horsey">Horsey</option>
         </select>
@@ -43,17 +51,23 @@
 
 
 @code {
-    //Starts by creating rows for the chessboard
+    //Til at starte med er der et 2d array som representere skakbrættet.
     public Field[,] fields = new Field[8, 8];
+    //Derudover er der et 4d array som bruges til at vise hvilke felter der er lovligt at flytte til. De første 2 dimensioner er de felter der er på brættet, mens de sidste 2 dimensioner er de felter der er lovligt at flytte til.
     public bool[,,,] targetField = new bool[8, 8, 8, 8];
+    //x0 og y0 er koordinaterne for den felt der er valgt. Hvis der ikke er valgt et felt er de null.
     public int? x0;
     public int? y0;
+    //String der bruges til at vise hvis tur det er.
     string currentTurn = "White";
+    //String der bruges til at vise hvilket tema der er valgt.
     string selectedTheme = "Classic";
 
 
+    //OnInitialized bliver kaldt når siden bliver loaded. 
     protected override void OnInitialized()
     {
+        //Her bliver alle felterne i arrayet initialiseret. Ellers ville de være null (det giver et par errors ups).
         for (int i = 0; i < fields.GetLength(0); i++)
         {
             for (int j = 0; j < fields.GetLength(1); j++)
@@ -61,12 +75,15 @@
                 fields[i, j] = new Field();
             }
         }
-
-        //Places pieces in starting positions
+        
+        //Har flyttet createPiecesObjects til en bestemt funktion for at gøre det mere overskueligt.
         createPiecesObjects();
+        //Newturn bliver kaldt for at skabe et targetField array til at starte med.
         newTurn();
+        //Fordi at newturn ændrer currentTurn bliver den defineret igen for at ændre det tilbage til den rigtige farve.
         currentTurn = "White";
 
+        //Heri laver jeg alle de forskellige objekter. Bemærk at dette er inden i onInitialized. Det er for at holde det lokalt, da det ikke skal bruges andre steder.
         void createPiecesObjects()
         {
             createBackRow(0, "Black");
@@ -74,6 +91,7 @@
             createPawnRow(1, "Black");
             createPawnRow(6, "White");
 
+            //Har igen delt det op i mindre funktioner for at undgå for meget gentagelse.
             void createBackRow(int i, string color)
             {
                 fields[i, 0].piece = new Rook(color);
@@ -96,8 +114,11 @@
         }
     }
 
+    //Her er funktionen newturn, som generere targetField arrayet.
+
     void newTurn()
     {
+        //Lidt mange nested for loops, men sådan er det når man har et 4d array. Bemærk getLenght for at undgå array out of bounds errors.
         for (int i = 0; i < targetField.GetLength(0); i++)
         {
             for (int j = 0; j < targetField.GetLength(1); j++)
@@ -107,18 +128,22 @@
                 {
                     for (int l = 0; l < targetField.GetLength(3); l++)
                     {
+                        //Hvis der ikke er en piece på feltet, så er der ingen lovlige træk fra det felt.
                         if (fields[i, j].piece == null)
                         {
                             targetField[i, j, k, l] = false;
                         }
                         else
                         {
+                            //Hvis der er en piece på feltet, så kaldes isMoveLegal metoden for at se om det er lovligt at flytte til det felt, ud fra brikkens metode, derudover tjekkes det om de to felter er på samme hold.
                             targetField[i, j, k, l] = (fields[i, j].piece!.isMoveLegal(i, j, k, l, fields) && !checkSameTeam(i, j, k, l));
                         }
                     }
                 }
             }
         }
+
+        //Simpel switch case der skifter farven på currentTurn.
         switch (currentTurn)
         {
             case "White":
@@ -130,6 +155,7 @@
         }
     }
 
+    //Her er funktoinen til selve den handling man fortager sig, når man klikker på et felt.
     void clicked(int x, int y)
     {
         if (fields[x, y].isSelected)
