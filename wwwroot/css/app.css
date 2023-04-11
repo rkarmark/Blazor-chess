@@ -31,7 +31,9 @@
         content: "An error has occurred."
     }
 
-
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
 
 
