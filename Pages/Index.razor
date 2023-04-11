@@ -3,7 +3,7 @@
 
 <div class="fixed w-screen h-screen overflow-scroll	bg-cover dark:invert" style="background-image:url('./images/background.jpg">
     <div class="flex dark:invert">
-        <div class="container border-8 border-neutral-700 rounded-2xl overflow-hidden mx-auto mt-8  drop-shadow-2xl @(whiteTurn() ? "border-b-lime-500" : "border-t-lime-500")">
+        <div class="container sm:w-3/4 md:w-1/2 xl:w-2/5 border-8 border-neutral-700 rounded-2xl overflow-hidden mx-auto mt-8  drop-shadow-2xl @(whiteTurn() ? "border-b-lime-500" : "border-t-lime-500")">
             <div class="grid grid-cols-8 grid-rows-8">
 
                 @for (int i = 0; i < fields.GetLength(0); i++)
