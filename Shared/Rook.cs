@@ -3,11 +3,12 @@ using System.Drawing;
 
 namespace blazor_chess
 {
-	public class Rook : ChessPiece
-	{
+    //samme boilerplate som ved de andre klasser
+    public class Rook : ChessPiece
+    {
         new string color;
 
-		public Rook(string setColor) : base(setColor)
+        public Rook(string setColor) : base(setColor)
         {
             color = setColor;
         }
@@ -34,6 +35,7 @@ namespace blazor_chess
 
         public override bool isMoveLegal(int x0, int y0, int x, int y, Field[,] fields)
         {
+            //Samme logik som ved bishop, bare ikke på skråt men ligeud i 4 retninger.
 
             for (int i = 1; i < 8; i++)
             {

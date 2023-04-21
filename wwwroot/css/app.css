@@ -1,4 +1,6 @@
-﻿h1:focus {
+﻿/* Blazor default klasser */
+
+h1:focus {
     outline: none;
 }
 

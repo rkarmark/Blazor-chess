@@ -1,14 +1,15 @@
 ﻿using System;
 namespace blazor_chess
 {
-	public class King : ChessPiece
-	{
+    //Samme bolierplate som ved de andre klasser
+    public class King : ChessPiece
+    {
         new string color;
 
-		public King(string setColor):base(setColor)
-		{
-			color = setColor;
-		}
+        public King(string setColor) : base(setColor)
+        {
+            color = setColor;
+        }
 
         public override string getType()
         {
@@ -29,9 +30,12 @@ namespace blazor_chess
             }
             return ("./images/" + theme + "/" + colorchar + "K.svg");
         }
+
+        //Logikken her er meget simpel. Den tjekker om det er indenfor en radius af 1 felt, og om feltet er tomt eller ej.
         public override bool isMoveLegal(int x0, int y0, int x, int y, Field[,] fields)
         {
-            if (Math.Abs(x-x0) <= 1 && Math.Abs(y-y0)<=1 && fields[x,y].piece?.color != color) {
+            if (Math.Abs(x - x0) <= 1 && Math.Abs(y - y0) <= 1 && fields[x, y].piece?.color != color)
+            {
                 return true;
             }
             return false;

@@ -193,10 +193,13 @@
                 //Ellers tjekkes det om det er lovligt at flytte til det felt, og hvis det er, så flyttes det.
                 if (fields[x0temp, y0temp].piece != null && colorLegalFields(x, y))
                 {
-                    fields[x0temp, y0temp].piece!.firstMove = false;
+                    //Increases moveCount
                     fields[x0temp, y0temp].piece!.moveCount += 1;
+                    //Kopiere brikken
                     fields[x, y].piece = fields[x0temp, y0temp].piece;
+                    //Sætter det gamle felt til at være null
                     fields[x0temp, y0temp].piece = null;
+                    //Fjerner selection
                     fields[x, y].isSelected = false;
                     fields[x0temp, y0temp].isSelected = false;
                     x0 = y0 = null;
@@ -207,6 +210,7 @@
         }
     }
 
+    //Tjekker om det er lovligt at flytte til et felt, ud fra det nuværende valgte felt.
     bool colorLegalFields(int x, int y)
     {
         int x0temp = x0 ?? default(int);
@@ -214,11 +218,13 @@
         return targetField[x0temp, y0temp, x, y];
     }
 
+    //Tjekker om to felter er på samme hold.
     bool checkSameTeam(int x0, int y0, int x, int y)
     {
         return fields[x, y].piece?.color == fields[x0, y0].piece?.color;
     }
 
+    //Tjekker om det er hvids tur.
     bool whiteTurn()
     {
         return currentTurn == "White";
