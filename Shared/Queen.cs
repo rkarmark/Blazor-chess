@@ -1,11 +1,12 @@
 ﻿using System;
 namespace blazor_chess
 {
-	public class Queen : ChessPiece
-	{
-		new string color;
+    //Samme boilerplate som alle andre klasser
+    public class Queen : ChessPiece
+    {
+        new string color;
 
-		public Queen(string setColor) : base(setColor)
+        public Queen(string setColor) : base(setColor)
         {
             color = setColor;
         }
@@ -32,6 +33,7 @@ namespace blazor_chess
 
         public override bool isMoveLegal(int x0, int y0, int x, int y, Field[,] fields)
         {
+            //Den har kombineret logik for løber og tårn. Så det er mange linjer, men ikke avanceret og meget det samme. 
             for (int i = 1; i < 8; i++)
             {
                 bool hasPassed = false;
