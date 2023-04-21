@@ -65,8 +65,9 @@ namespace blazor_chess
                     }
 
                     //For loopet her er for at man har noget at "breake" ud af, hvis at man får en out of array. Der er bedre måder at gøre det på, men det er fuldt funktionelt, og i min experimentering har andet ikke virkert. 
-                    for (int i = 1; i < 2; i++)
+                    while (true)
                     {
+                        int i = 1;
                         try
                         {
                             if (fields[x0 - i, y0 + 1].piece?.color == "Black")
@@ -121,8 +122,9 @@ namespace blazor_chess
                             break;
                         }
                     }
-                    for (int i = 1; i < 2; i++)
+                    while (true)
                     {
+                        int i = 1;
                         try
                         {
                             if (fields[x0 + i, y0 + 1].piece?.color == "White")
@@ -185,8 +187,9 @@ namespace blazor_chess
                             break;
                         }
                     }
-                    for (int i = 1; i < 2; i++)
+                    while (true)
                     {
+                        int i = 1;
                         try
                         {
                             if (fields[x0 - i, y0 + 1].piece?.color == "Black")
@@ -240,8 +243,9 @@ namespace blazor_chess
                             break;
                         }
                     }
-                    for (int i = 1; i < 2; i++)
+                    while (true)
                     {
+                        int i = 1;
                         try
                         {
                             if (fields[x0 + i, y0 + 1].piece?.color == "White")
