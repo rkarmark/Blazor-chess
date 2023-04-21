@@ -1,11 +1,12 @@
 ﻿@page "/"
 @namespace blazorchess.Shared
 
-<div class="fixed w-screen h-screen overflow-scroll	bg-cover dark:invert" style="background-image:url('./images/background.jpg">
+<div class="fixed w-screen h-screen overflow-scroll bg-cover dark:invert" style="background-image:url('./images/background.jpg">
     <div class="flex dark:invert">
         <div class="container sm:w-3/4 md:w-1/2 xl:w-2/5 border-8 border-neutral-700 rounded-2xl overflow-hidden mx-auto mt-8  drop-shadow-2xl @(whiteTurn() ? "border-b-lime-500" : "border-t-lime-500")">
             <div class="grid grid-cols-8 grid-rows-8">
-
+                
+                <!-- Her bliver der loopt igennem alle felterne i de to første dimensioner af arrayet. -->
                 @for (int i = 0; i < fields.GetLength(0); i++)
                 {
                     @for (int j = 0; j < fields.GetLength(1); j++)
@@ -13,17 +14,13 @@
                         int x = i;
                         int y = j;
                             <div class="aspect-square grow flex box-border duration-300
-                            /*
-                                Der sker en del her i css'en:
-                                    Aspect-square for at være sikker på at feltet er et kvadrat. 
-                            */ 
                             @(colorLegalFields(i,j) && fields[i, j].piece != null ? "border-4 border-lime-500": "") 
                             @(fields[i,j].isSelected ? "bg-lime-500" : ((i - j) % 2 == 0 ? "bg-orange-200" : "bg-amber-600"))"         
                             @onclick="() => clicked(x, y)" >
                                 <!-- Her bliver der tjekket om der er en brik på feltet. Hvis der er en brik bliver der kaldt en metode for brikken for at få et billede af den som bliver vist. -->
                                 @if (fields[i, j].piece != null)
                                 {
-                                    <img class="w-3/4 h-3/4 m-auto select-none pointer-events-none" src="@fields[i, j].piece?.getImage(selectedTheme)" alt="@fields[i, j].piece!.color @fields[i, j].piece!.getType()" />
+                                    <img class="w-3/4 m-auto pointer-events-none select-none h-3/4" src="@fields[i, j].piece?.getImage(selectedTheme)" alt="@fields[i, j].piece!.color @fields[i, j].piece!.getType()" />
                                 }
                                 else
                                 {
@@ -37,8 +34,9 @@
         </div>
     </div>
 
+    <!-- Her er der et dropdown til at vælge farvetema for brikkerne -->
     <div class="flex flex-col pb-16">
-        <label class="block text-ml font-medium leading-6 text-gray-900 mt-4 mx-auto">Theme:</label>
+        <label class="block mx-auto mt-4 font-medium leading-6 text-gray-900 text-ml">Theme:</label>
         <select @bind="selectedTheme" class="m-auto mt-2 block w-64 rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6 outline-none select-none">
             <option value="Classic">Classic</option>
             <option value="Horsey">Horsey</option>
@@ -158,6 +156,7 @@
     //Her er funktoinen til selve den handling man fortager sig, når man klikker på et felt.
     void clicked(int x, int y)
     {
+        //Tjekker om feltet er valgt, hvis det er, så fjernes valget.
         if (fields[x, y].isSelected)
         {
             fields[x, y].isSelected = false;
@@ -165,6 +164,7 @@
         }
         else
         {
+            //Hvis det er det første felt der er valgt så sættes det til at være valgt.
             if (x0 == null || y0 == null)
             {
                 if (fields[x, y].piece != null && fields[x, y].piece?.color == currentTurn)
@@ -175,10 +175,13 @@
                 }
             }
             else
+            //Hvis det er det andet felt der er valgt, så tjekkes det om det er lovligt at flytte til det felt.
             {
+                //konvertere nullable int til int, da de er nullable for at kunne vise at der ikke er selected noget, men til beregningerne kan de ikke være null. Dette kan ikke give errors da jeg i forrige else tjekker om de er null.
                 int x0temp = x0 ?? default(int);
                 int y0temp = y0 ?? default(int);
 
+                //Hvis at det andet felt er på samme hold som det første, så fjernes valget fra det første felt og sættes på det andet. I brugertest blev folk ved med at prøve det.
                 if (checkSameTeam(x, y, x0temp, y0temp))
                 {
                     fields[x0temp, y0temp].isSelected = false;
@@ -187,6 +190,7 @@
                     y0 = y;
                 }
 
+                //Ellers tjekkes det om det er lovligt at flytte til det felt, og hvis det er, så flyttes det.
                 if (fields[x0temp, y0temp].piece != null && colorLegalFields(x, y))
                 {
                     fields[x0temp, y0temp].piece!.firstMove = false;
@@ -196,6 +200,7 @@
                     fields[x, y].isSelected = false;
                     fields[x0temp, y0temp].isSelected = false;
                     x0 = y0 = null;
+                    //Til sidst 
                     newTurn();
                 }
             }

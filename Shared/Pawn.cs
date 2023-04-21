@@ -70,7 +70,7 @@ namespace blazor_chess
                                     return true;
                                 }
                             }
-                            else if (fields[x0 - i, y0 - 1].piece?.color == "Black")
+                            if (fields[x0 - i, y0 - 1].piece?.color == "Black")
                             {
                                 if (x0 - i == x && y0 - 1 == y)
                                 {
@@ -78,10 +78,8 @@ namespace blazor_chess
                                     return true;
                                 }
                             }
-                            else
-                            {
-                                break;
-                            }
+                            break;
+
                         }
                         catch
                         {
@@ -126,7 +124,7 @@ namespace blazor_chess
                                     return true;
                                 }
                             }
-                            else if (fields[x0 + i, y0 - 1].piece?.color == "White")
+                            if (fields[x0 + i, y0 - 1].piece?.color == "White")
                             {
                                 if (x0 + i == x && y0 - 1 == y)
                                 {
@@ -134,10 +132,9 @@ namespace blazor_chess
                                     return true;
                                 }
                             }
-                            else
-                            {
-                                break;
-                            }
+
+                            break;
+
                         }
                         catch
                         {
@@ -189,7 +186,7 @@ namespace blazor_chess
                                     return true;
                                 }
                             }
-                            else if (fields[x0 - i, y0 - 1].piece?.color == "Black")
+                            if (fields[x0 - i, y0 - 1].piece?.color == "Black")
                             {
                                 if (x0 - i == x && y0 - 1 == y)
                                 {
@@ -197,10 +194,9 @@ namespace blazor_chess
                                     return true;
                                 }
                             }
-                            else
-                            {
-                                break;
-                            }
+
+                            break;
+
                         }
                         catch
                         {
@@ -245,7 +241,7 @@ namespace blazor_chess
                                     return true;
                                 }
                             }
-                            else if (fields[x0 + i, y0 - 1].piece?.color == "White")
+                            if (fields[x0 + i, y0 - 1].piece?.color == "White")
                             {
                                 if (x0 + i == x && y0 - 1 == y)
                                 {
@@ -253,10 +249,7 @@ namespace blazor_chess
                                     return true;
                                 }
                             }
-                            else
-                            {
-                                break;
-                            }
+                            break;
                         }
                         catch
                         {
